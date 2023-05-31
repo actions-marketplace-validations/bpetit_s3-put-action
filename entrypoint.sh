@@ -16,7 +16,15 @@ echo "Uploading file to ${LOCAL_FILE} to ${REMOTE_FILE}"
 if [[ ! -z "$INCLUDE_SHA256" ]]; then
     echo "Generating SHA256"
     cat ${LOCAL_FILE} | sha256sum | awk '{printf $1}' > ${LOCAL_FILE}.sha256
-    s3cmd put ${LOCAL_FILE}.sha256 s3://${AWS_BUCKET}/${REMOTE_FILE}.sha256 $*
+    if [ ${AWS_ENDPOINT} != "" ]; then
+      s3cmd put --host=${AWS_ENDPOINT} ${LOCAL_FILE}.sha256 s3://${AWS_BUCKET}/${REMOTE_FILE}.sha256 $*
+    else
+      s3cmd put ${LOCAL_FILE}.sha256 s3://${AWS_BUCKET}/${REMOTE_FILE}.sha256 $*
+    fi
 fi
 
+if [ ${AWS_ENDPOINT} != "" ]; then
+s3cmd put --host=${AWS_ENDPOINT} ${LOCAL_FILE} s3://${AWS_BUCKET}/${REMOTE_FILE} $*
+else
 s3cmd put ${LOCAL_FILE} s3://${AWS_BUCKET}/${REMOTE_FILE} $*
+fi
