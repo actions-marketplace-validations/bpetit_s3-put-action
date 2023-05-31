@@ -1,5 +1,5 @@
-name: 'Push to S3'
-author: 'Jon Friesen'
+name: 'Push to S3 (any endpoint)'
+author: 'Benoit Petit'
 branding:
   icon: 'upload-cloud'
   color: 'orange'
